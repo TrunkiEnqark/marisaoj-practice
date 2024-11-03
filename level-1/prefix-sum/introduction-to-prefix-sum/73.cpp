@@ -23,16 +23,10 @@ int main() {
         return b[u][v] - b[x - 1][v] - b[u][y - 1] + b[x - 1][y - 1];
     };
 
-    // for (int i = 1; i <= m; ++i) {
-    //     for (int j = 1; j <= m; ++j) cout << b[i][j] << ' ';
-    //     cout << endl;
-    // }
-
     for (int i = 1; i <= n; ++i) {
         for (int j = 1; j <= n; ++j) {
             int x = i + j - 1;
             int y = n - i + j;
-            // cout << b[x][y] << endl;
             cout << get_sum(max(1, x - k), max(1, y - k), min(m, x + k), min(m, y + k)) << ' ';
         }
         cout << endl;
