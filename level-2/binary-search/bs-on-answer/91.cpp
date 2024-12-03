@@ -24,24 +24,14 @@ const int N = 1e5 + 5;
 const int INF = 1e9;
 
 int n, k;
-double a[N], pre[N];
-
-/*
-a[l]+a[l+1]+...+a[r-1]+a[r] = mid * (r-l+1)
-=> (a[l]-mid) + (a[l+1]-mid) + ... + (a[r-1]-mid) + (a[r]-mid) = 0
-*/
+double a[N];
 
 bool check(double mid) {
-    pre[0] = 0;
-    for (int i = 1; i <= n; ++i) 
-        pre[i] = pre[i - 1] + a[i] - mid;
-    
-    double mi = 0;
-    for (int i = k; i <= n; ++i) {
-        if (pre[i] >= mi) return true;
-        mi = min(mi, pre[i - k + 1]);
+    int cnt = 0;
+    for (int i = 1; i <= n; ++i) {
+        cnt += a[i] / mid;
     }
-    return false;
+    return cnt >= k;
 }
 
 int main() {
@@ -50,22 +40,20 @@ int main() {
     // freopen(NAME".out", "w", stdout);
 
     cin >> n >> k;
-    for (int i = 1; i <= n; ++i)
-        cin >> a[i];
+    for (int i = 1; i <= n; ++i) cin >> a[i], a[i] *= a[i];
 
-    double lo = *min_element(a + 1, a + n + 1);
-    double hi = *max_element(a + 1, a + n + 1);
-    double res;
+    double lo = 0;
+    double hi = 1e14;
     while (hi - lo > 1e-6) {
         double mid = (lo + hi) / 2;
         if (check(mid)) {
-            res = mid;
             lo = mid;
         } else {
             hi = mid;
         }
     }
-    cout << fixed << setprecision(3) << res;
+
+    cout << fixed << setprecision(3) << lo;
 
     return 0;
 }

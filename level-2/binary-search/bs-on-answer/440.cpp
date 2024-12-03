@@ -24,24 +24,17 @@ const int N = 1e5 + 5;
 const int INF = 1e9;
 
 int n, k;
-double a[N], pre[N];
-
-/*
-a[l]+a[l+1]+...+a[r-1]+a[r] = mid * (r-l+1)
-=> (a[l]-mid) + (a[l+1]-mid) + ... + (a[r-1]-mid) + (a[r]-mid) = 0
-*/
+double a[N], b[N], c[N];
 
 bool check(double mid) {
-    pre[0] = 0;
-    for (int i = 1; i <= n; ++i) 
-        pre[i] = pre[i - 1] + a[i] - mid;
-    
-    double mi = 0;
-    for (int i = k; i <= n; ++i) {
-        if (pre[i] >= mi) return true;
-        mi = min(mi, pre[i - k + 1]);
-    }
-    return false;
+    for (int i = 1; i <= n; ++i)
+        c[i] = a[i] - mid * b[i];
+
+    sort(c + 1, c + n + 1, greater<double>());
+    double tmp = 0;
+    for (int i = 1; i <= k; ++i)
+        tmp += c[i];
+    return tmp >= 0;
 }
 
 int main() {
@@ -51,21 +44,20 @@ int main() {
 
     cin >> n >> k;
     for (int i = 1; i <= n; ++i)
-        cin >> a[i];
-
-    double lo = *min_element(a + 1, a + n + 1);
-    double hi = *max_element(a + 1, a + n + 1);
-    double res;
+        cin >> a[i] >> b[i];
+    
+    double lo = 0, hi = 1e16;
     while (hi - lo > 1e-6) {
         double mid = (lo + hi) / 2;
         if (check(mid)) {
-            res = mid;
             lo = mid;
         } else {
             hi = mid;
         }
     }
-    cout << fixed << setprecision(3) << res;
+    cout << fixed << setprecision(4) << lo;
 
     return 0;
 }
+
+// Tutorial: https://oi-wiki.org/misc/frac-programming/
