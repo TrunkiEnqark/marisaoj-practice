@@ -1,52 +1,53 @@
 #include <bits/stdc++.h>
-
-#define NAME ""
-#define i32 int
 #define i64 int64_t
-#define u32 unsigned int
-#define u64 unsigned long long
 #define ll long long
 #define ld long double
 #define ii pair<int, int>
 #define vi vector<int>
 #define vii vector<vector<int>>
-#define vec vector
 #define fi first
 #define se second
-#define sz(a) (u32)(a.size())
 #define all(a) a.begin(), a.end()
-#define rev(a) a.rbegin(), a.rend()
-
 using namespace std;
 
 const ll MOD = 1e9 + 7;
-const int N = 1e5 + 5;
-const int INF = 1e9;
 
-ll n;
+ll sum(ll n) {
+    n %= MOD;
+    return n * (n + 1) % MOD * ((MOD + 1) / 2) % MOD;
+}
 
-ll count_pairs(ll k) {
-    ll cnt = n / k;
-    return cnt * (cnt + 1) / 2;
+ll sum_range(ll l, ll r) {
+    if (l > r) return 0ll;
+    return (sum(r) - sum(l - 1) + MOD * MOD) % MOD;
+}
+
+ll solve(ll n) {
+    ll res = 0;
+
+    ll i = 1, last = 0;
+    while (i <= n) {
+        ll q = n / i;  
+        last = n / q;  
+        
+        ll count = last - i + 1;  
+        ll s = sum_range(i, last);  
+        
+        res = (res + s * sum(q) % MOD) % MOD;
+        
+        i = last + 1;
+    }
+    
+    return res;
 }
 
 int main() {
-    ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-    // freopen(NAME".inp", "r", stdin);
-    // freopen(NAME".out", "w", stdout);
-
+    ios::sync_with_stdio(false); 
+    cin.tie(nullptr);
+    
+    ll n;
     cin >> n;
-
-    ll res = 0;
-    for (int i = 1; i * i <= n; ++i) {
-        res = (res + count_pairs(i) * i) % MOD;
-
-        if (n / i != i) {
-            res = (res + count_pairs(n / i) * (n / i)) % MOD;
-        }
-    }
-
-    cout << res;
-
+    cout << solve(n) << '\n';
+    
     return 0;
 }
