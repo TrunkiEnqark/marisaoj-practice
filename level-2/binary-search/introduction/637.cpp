@@ -21,10 +21,10 @@ using namespace std;
 
 const int MOD = 1e9 + 7;
 const int N = 2e5 + 5;
-const ll INF = 1e9;
+const int INF = 1e9;
 
 int n;
-ll s, a[N], pre[N];
+ll s, a[N], pre[N], mx[N];
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
@@ -32,17 +32,18 @@ int main() {
     // freopen(NAME".out", "w", stdout);
 
     cin >> n >> s;
-    s += INF;
     for (int i = 1; i <= n; ++i) {
         cin >> a[i];
-        pre[i] = pre[i - 1] + a[i] + INF;
+        pre[i] = pre[i - 1] + a[i];
+        mx[i] = max(mx[i - 1], pre[i]);
     }
-    // for (int i = 1; i <= n; ++i) pre[i] += i * INF;
+
+    // for (int i = 1; i <= n; ++i) cout << mx[i] << ' '; cout << endl;
 
     int res = -1;
-    for (int l = 1; l <= n; ++l) {
-        int r = upper_bound(pre + 1, pre + n + 1, s + pre[l - 1]) - pre - 1;
-        cout << l << ' ' << r << endl;
+    for (int r = 1; r <= n; ++r) {
+        int l = lower_bound(mx, mx + n + 1, pre[r] - s) - mx + 1;
+        // cout << l << ' ' << r << endl;
         if (l <= r) res = max(res, r - l + 1);
     }
 
