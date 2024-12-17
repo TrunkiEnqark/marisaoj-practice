@@ -20,27 +20,27 @@
 using namespace std;
 
 const int MOD = 1e9 + 7;
-const int N = 1e5 + 5;
+const int N = 1e3 + 5;
 const int INF = 1e9;
 
-int n, t[N], r[N], dp[N];
+int n, k, a[N], dp[N][N];
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
     // freopen(NAME".inp", "r", stdin);
     // freopen(NAME".out", "w", stdout);
 
-    cin >> n;
-    for (int i = 1; i <= n; ++i) cin >> t[i];
-    for (int i = 1; i < n; ++i) cin >> r[i];
+    cin >> n >> k;
+    for (int i = 1; i <= n; ++i) cin >> a[i];
+    
+    for (int i = 0; i <= n; ++i) dp[i][0] = 1;
 
-    dp[1] = t[1];
-    dp[2] = min(t[1] + t[2], r[1]);
-    for (int i = 3; i <= n; ++i) {
-        dp[i] = min(dp[i - 1] + t[i], dp[i - 2] + r[i - 1]);
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= k; ++j) {
+            dp[i][j] = (dp[i - 1][j] + 1ll * dp[i - 1][j - 1] * a[i] % MOD) % MOD;
+        }
     }
-
-    cout << dp[n];
+    cout << dp[n][k];
 
     return 0;
 }
